@@ -54,13 +54,15 @@ public class ComparisonCompactor {
     }
 
     private String compactString(String source) {
+        int end = Math.min(expected.length() - suffixLength + contextLength, expected.length());
         return new StringBuilder()
                 .append(prefixIndex > contextLength ? ELLIPSIS : "")
                 .append(expected.substring(Math.max(0, prefixIndex - contextLength), prefixIndex))
                 .append(DELTA_START)
                 .append(source.substring(prefixIndex, source.length() - suffixLength))
                 .append(DELTA_END)
-                .append(computeCommonSuffix())
+                .append(expected.substring(expected.length() - suffixLength, end))
+                .append(expected.length() - suffixLength < expected.length() - contextLength ? ELLIPSIS : "")
                 .toString();
     }
 
@@ -82,11 +84,6 @@ public class ComparisonCompactor {
                 break;
             }
         }
-    }
-
-    private String computeCommonSuffix() {
-        int end = Math.min(expected.length() - suffixLength + contextLength, expected.length());
-        return expected.substring(expected.length() - suffixLength, end) + (expected.length() - suffixLength < expected.length() - contextLength ? ELLIPSIS : "");
     }
 
 }
