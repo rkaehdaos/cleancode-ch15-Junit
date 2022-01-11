@@ -60,9 +60,15 @@ public class ComparisonCompactor {
                 .append(DELTA_START)
                 .append(delta(s))
                 .append(DELTA_END)
-                .append(expected.substring(expected.length() - suffixLength, Math.min(expected.length() - suffixLength + contextLength, expected.length())))
+                .append(endingContext())
                 .append(endingEllipsis())
                 .toString();
+    }
+
+    private String endingContext() {
+        int contextStart = expected.length() - suffixLength;
+        int contextEnd = Math.min(contextStart + contextLength, expected.length());
+        return expected.substring(contextStart, contextEnd);
     }
 
 
