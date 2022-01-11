@@ -21,7 +21,7 @@ public class ComparisonCompactor {
     }
 
     @SuppressWarnings("deprecation")
-    public String compact(String message) {
+    public String formatCompactedComparison(String message) {
         if (canBeCompacted()) {
             findCommonPrefix();
             findCommonSuffix();
