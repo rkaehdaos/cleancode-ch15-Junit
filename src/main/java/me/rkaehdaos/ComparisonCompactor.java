@@ -43,14 +43,12 @@ public class ComparisonCompactor {
     }
 
     private String compactString(String source) {
-        String result = DELTA_START + source.substring(prefixIndex, source.length() - suffixLength) + DELTA_END;
-        if (prefixIndex > 0) {
-            result = computeCommonPrefix() + result;
-        }
-        if (suffixLength > 0) {
-            result = result + computeCommonSuffix();
-        }
-        return result;
+        return
+                computeCommonPrefix() +
+                        DELTA_START +
+                        source.substring(prefixIndex, source.length() - suffixLength) +
+                        DELTA_END +
+                        computeCommonSuffix();
     }
 
     private void findCommonPrefixAndSuffix() {
