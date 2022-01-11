@@ -53,45 +53,6 @@ public class ComparisonCompactor {
         }
     }
 
-    private String compactString(String s) {
-        return new StringBuilder()
-                .append(startingEllipsis())
-                .append(startingContext())
-                .append(DELTA_START)
-                .append(delta(s))
-                .append(DELTA_END)
-                .append(endingContext())
-                .append(endingEllipsis())
-                .toString();
-    }
-
-    private String endingContext() {
-        int contextStart = expected.length() - suffixLength;
-        int contextEnd = Math.min(contextStart + contextLength, expected.length());
-        return expected.substring(contextStart, contextEnd);
-    }
-
-
-    private String startingEllipsis() {
-        return prefixIndex > contextLength ? ELLIPSIS : "";
-    }
-
-    private String startingContext() {
-        return expected.substring(Math.max(0, prefixIndex - contextLength), prefixIndex);
-    }
-
-    private String delta(String s) {
-        int deltaStart = prefixIndex;
-        int deltaEnd = s.length() - suffixLength;
-        return s.substring(deltaStart, deltaEnd);
-    }
-
-    private String endingEllipsis() {
-        return suffixLength > contextLength ? ELLIPSIS : "";
-    }
-
-
-
     private char charFromEnd(String s, int i) {
         return s.charAt(s.length() - i - 1);
     }
@@ -108,6 +69,42 @@ public class ComparisonCompactor {
                 break;
             }
         }
+    }
+
+    private String compactString(String s) {
+        return new StringBuilder()
+                .append(startingEllipsis())
+                .append(startingContext())
+                .append(DELTA_START)
+                .append(delta(s))
+                .append(DELTA_END)
+                .append(endingContext())
+                .append(endingEllipsis())
+                .toString();
+    }
+
+    private String startingEllipsis() {
+        return prefixIndex > contextLength ? ELLIPSIS : "";
+    }
+
+    private String startingContext() {
+        return expected.substring(Math.max(0, prefixIndex - contextLength), prefixIndex);
+    }
+
+    private String delta(String s) {
+        int deltaStart = prefixIndex;
+        int deltaEnd = s.length() - suffixLength;
+        return s.substring(deltaStart, deltaEnd);
+    }
+
+    private String endingContext() {
+        int contextStart = expected.length() - suffixLength;
+        int contextEnd = Math.min(contextStart + contextLength, expected.length());
+        return expected.substring(contextStart, contextEnd);
+    }
+
+    private String endingEllipsis() {
+        return suffixLength > contextLength ? ELLIPSIS : "";
     }
 
 }
