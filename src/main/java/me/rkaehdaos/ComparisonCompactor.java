@@ -13,8 +13,7 @@ public class ComparisonCompactor {
     private String actual;
     private int prefixIndex;
     private int suffixLength;
-    private String compactExpected;
-    private String compactActual;
+
 
     public ComparisonCompactor(int contextLength, String expected, String actual) {
         this.contextLength = contextLength;
@@ -24,37 +23,24 @@ public class ComparisonCompactor {
 
     @SuppressWarnings("deprecation")
     public String formatCompactedComparison(String message) {
+        String compactExpected=expected;
+        String compactActual=actual;
         if (canBeCompacted()) {
-            compactExpectedAndActual();
-            return Assert.format(message, compactExpected, compactActual);
-        } else {
-            return Assert.format(message, expected, actual);
+            findCommonPrefixAndSuffix();
+            compactExpected = compactString(expected);
+            compactActual = compactString(actual);
         }
+        return Assert.format(message, compactExpected, compactActual);
     }
 
     private boolean canBeCompacted() {
         return !ShouldNotBeCompacted();
     }
 
-    private void compactExpectedAndActual() {
-        findCommonPrefixAndSuffix();
-        compactExpected = compactString(expected);
-        compactActual = compactString(actual);
-    }
-
     private boolean ShouldNotBeCompacted() {
         return expected == null ||
                 actual == null ||
                 expected.equals(actual);
-    }
-
-    private String compactString(String source) {
-        return
-                computeCommonPrefix() +
-                        DELTA_START +
-                        source.substring(prefixIndex, source.length() - suffixLength) +
-                        DELTA_END +
-                        computeCommonSuffix();
     }
 
     private void findCommonPrefixAndSuffix() {
@@ -66,6 +52,17 @@ public class ComparisonCompactor {
             }
         }
     }
+
+    private String compactString(String source) {
+        return
+                computeCommonPrefix() +
+                        DELTA_START +
+                        source.substring(prefixIndex, source.length() - suffixLength) +
+                        DELTA_END +
+                        computeCommonSuffix();
+    }
+
+
 
     private char charFromEnd(String s, int i) {
         return s.charAt(s.length() - i - 1);
