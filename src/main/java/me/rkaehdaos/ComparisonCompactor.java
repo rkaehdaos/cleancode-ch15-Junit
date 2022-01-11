@@ -55,7 +55,8 @@ public class ComparisonCompactor {
 
     private String compactString(String source) {
         return new StringBuilder()
-                .append(computeCommonPrefix())
+                .append(prefixIndex > contextLength ? ELLIPSIS : "")
+                .append(expected.substring(Math.max(0, prefixIndex - contextLength), prefixIndex))
                 .append(DELTA_START)
                 .append(source.substring(prefixIndex, source.length() - suffixLength))
                 .append(DELTA_END)
@@ -81,10 +82,6 @@ public class ComparisonCompactor {
                 break;
             }
         }
-    }
-
-    private String computeCommonPrefix() {
-        return (prefixIndex > contextLength ? ELLIPSIS : "") + expected.substring(Math.max(0, prefixIndex - contextLength), prefixIndex);
     }
 
     private String computeCommonSuffix() {
