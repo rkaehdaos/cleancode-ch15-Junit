@@ -22,7 +22,7 @@ public class ComparisonCompactor {
 
     @SuppressWarnings("deprecation")
     public String compact(String message) {
-        if (expected == null || actual == null || areStringsEqual()) {
+        if (shouldNotCompact()) {
             return Assert.format(message, expected, actual);
         }
 
@@ -31,6 +31,10 @@ public class ComparisonCompactor {
         String expected = compactString(this.expected);
         String actual = compactString(this.actual);
         return Assert.format(message, expected, actual);
+    }
+
+    private boolean shouldNotCompact() {
+        return expected == null || actual == null || areStringsEqual();
     }
 
     private String compactString(String source) {
