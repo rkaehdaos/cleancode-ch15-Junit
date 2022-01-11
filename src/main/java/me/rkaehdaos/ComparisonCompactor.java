@@ -32,14 +32,20 @@ public class ComparisonCompactor {
         }
     }
 
+    private boolean canBeCompacted() {
+        return !ShouldNotBeCompacted();
+    }
+
     private void compactExpectedAndActual() {
         findCommonPrefixAndSuffix();
         compactExpected = compactString(expected);
         compactActual = compactString(actual);
     }
 
-    private boolean canBeCompacted() {
-        return expected != null && actual != null && !areStringsEqual();
+    private boolean ShouldNotBeCompacted() {
+        return expected == null ||
+                actual == null ||
+                expected.equals(actual);
     }
 
     private String compactString(String source) {
@@ -88,7 +94,4 @@ public class ComparisonCompactor {
         return expected.substring(expected.length() - suffixLength, end) + (expected.length() - suffixLength < expected.length() - contextLength ? ELLIPSIS : "");
     }
 
-    private boolean areStringsEqual() {
-        return expected.equals(actual);
-    }
 }
